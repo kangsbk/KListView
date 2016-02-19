@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by KSBK on 2016/2/19 0019.
@@ -23,8 +24,37 @@ public class ClassifyAdapter extends BaseAdapter {
     private Context context;
 
     public ClassifyAdapter(ArrayList<AbstractItem> datas,Context context) {
-        mDatas = datas;
+        mDatas = sortAndClassify(datas);
         this.context = context;
+
+    }
+
+
+    private ArrayList<AbstractItem> sortAndClassify(ArrayList<AbstractItem> datas){
+        //排序
+        Collections.sort(datas);
+        //加入标签
+        String last="A";
+        for (int i=0;i<datas.size();i++){
+            AbstractItem item = datas.get(i);
+            String head = item.getFirstChar();
+            if (i==0){
+                //add head
+                TitleItem title = new TitleItem(head);
+                datas.add(i,title);
+                i++;
+            }else {
+                if (!head.equals(last)){
+                    //add head
+                    TitleItem title = new TitleItem(head);
+                    datas.add(i,title);
+                    i++;
+                }
+            }
+            last=head;
+        }
+        return datas;
+
     }
 
     @Override
